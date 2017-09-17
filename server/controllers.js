@@ -21,6 +21,7 @@ export function launch(req, res) {
         });
         res.send(store);
       } else {
+        console.log(stdout);
         store.add({
           key: store.size(),
           commentary,
