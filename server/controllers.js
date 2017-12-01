@@ -1,47 +1,34 @@
 import { exec } from "child_process";
 import store from "./list";
+import NmapJob from './jobs/NmapJob';
 
 export function launch(req, res) {
-  let command, commentary, timeStart;
+  let command, host, timeStart;
   try {
-    const checked = (req.query.checked == 'true');
+    const data = JSON.parse(req.query.data);
     command = req.query.command;
-    commentary = req.query.commentary;
+    host = req.query.host;
     timeStart = new Date().getTime();
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`exec error: ${error}`);
-        store.add({
-          commentary,
-          command,
-          timeStart,
-          timeEnd: new Date().getTime(),
-          value: "Command failed",
-          status: -1
-        });
-        res.send(store);
-      } else {
-        console.log(stdout);
-        store.add({
-          key: store.size(),
-          commentary,
-          command,
-          timeStart,
-          timeEnd: new Date().getTime(),
-          value: stdout,
-          status: 1
-        });
-        if (checked) {
-          setTimeout(() => res.send(store), 10000);
-        } else {
-          res.send(store);
-        }
-      }
-    });
+    const nmapJob = new NmapJob();
+    nmapJob.run({ command, host, data });
+    // nmapJob.terminate();
+    // nmapJob.get().then(res => {
+    //   console.log("adasd" + res);
+    //   // store.add({
+    //     //   key: store.size(),
+    //     //   host,
+    //     //   command,
+    //     //   timeStart,
+    //     //   timeEnd: new Date().getTime(),
+    //     //   value: res,
+    //     //   status: 1
+    //     // })
+    //   // res.send(store);
+    //   });
   } catch (err) {
     console.log("Error handling should be here: " + err);
     store.add({
-      commentary,
+      host,
       command,
       timeStart,
       timeEnd: new Date().getTime(),

@@ -27,7 +27,7 @@ export default class CommandListItem extends React.Component {
     const timeValueEnd = typeof this.props.timeEnd === "string" ? this.props.timeEnd : this.getTime(this.props.timeEnd);
     return (<div>
       <div className="col-md-2">{this.props.command}</div>
-      <div className="col-md-3">{this.props.commentary}</div>
+      <div className="col-md-3">{this.props.host}</div>
       <div className="col-md-1">{timeValueStart}</div>
       <div className="col-md-1">{timeValueEnd}</div>
       <div className="col-md-4">{this.props.value}</div>

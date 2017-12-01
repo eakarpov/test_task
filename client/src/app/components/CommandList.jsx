@@ -17,12 +17,14 @@ class CommandList extends React.Component {
   componentWillMount(){
     const result = [];
     for (const elem of this.props.commands) {
-      result.push(<CommandListItem commentary={elem.commentary}
-                                   command={elem.command}
-                                   timeStart={elem.timeStart}
-                                   timeEnd={elem.timeEnd}
-                                   value={elem.value}
-                                   status={elem.status} />);
+      result.push(<CommandListItem
+        key={`${elem.timeStart}-${elem.command}`}
+        host={elem.host}
+        command={elem.command}
+        timeStart={elem.timeStart}
+        timeEnd={elem.timeEnd}
+        value={elem.value}
+        status={elem.status} />);
     }
     this.setState({
       elements: result
