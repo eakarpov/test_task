@@ -1,5 +1,6 @@
 import store from "./list";
 import NmapJob from './jobs/NmapJob';
+import OpenvasJob from './jobs/OpenvasJob';
 
 export function launch(req, res) {
   let command, host, timeStart, key;
@@ -9,11 +10,24 @@ export function launch(req, res) {
     host = req.query.host;
     key = req.query.key;
     timeStart = new Date().getTime();
-    const nmapJob = new NmapJob(key);
-    res.sendStatus(201);
-    nmapJob.run({ host, data });
-    nmapJob.get().then(result => {
-      store.add({
+    let job;
+    switch (command) {
+      case 'nmap': {
+        job = new NmapJob(key);
+        break;
+      }
+      case 'openvas' : {
+        job = new OpenvasJob(key);
+        break;
+      }
+      default: job = null;
+    }
+    if (job === null) res.send(400);
+    else {
+      res.sendStatus(201);
+      job.run({host, data});
+      job.get().then(result => {
+        store.add({
           key,
           host,
           command,
@@ -22,8 +36,9 @@ export function launch(req, res) {
           value: result,
           status: 1
         });
-      global.io.emit('task-executed', store);
-    });
+        global.io.emit('task-executed', store);
+      });
+    }
   } catch (err) {
     console.log("Error handling should be here: " + err);
     store.add({

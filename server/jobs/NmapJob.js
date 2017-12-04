@@ -18,7 +18,7 @@ export default class NmapJob extends IJob {
   }
 
   run(params) {
-    this.state.initial = false;
+    super.run();
     const cParams = this.configure(Object.assign(params, {command: 'nmap'}));
     const prms = Object.keys(cParams).map(el => `${el} ${cParams[el]}`);
     this.process = fork(path.resolve(__dirname, `./${this.name}.js`), prms);

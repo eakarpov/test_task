@@ -20,8 +20,8 @@ export default class IJob {
     this.data = '';
   }
 
-  run(params) {
-   return null;
+  run() {
+   this.state.initial = false;
   }
 
   get() {
