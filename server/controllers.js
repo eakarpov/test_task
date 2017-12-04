@@ -11,7 +11,7 @@ export function launch(req, res) {
     timeStart = new Date().getTime();
     const nmapJob = new NmapJob(key);
     res.sendStatus(201);
-    nmapJob.run({ command, host, data });
+    nmapJob.run({ host, data });
     nmapJob.get().then(result => {
       store.add({
           key,

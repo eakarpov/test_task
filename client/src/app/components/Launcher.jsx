@@ -72,7 +72,7 @@ class Launcher extends React.Component {
             <button type="button" className="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
-            Command is executed!
+            Command is started!
           </div>,
         });
       })
@@ -90,13 +90,16 @@ class Launcher extends React.Component {
           <select name="commandName" onChange={this.change} value={this.state.command}>
             <option value="ping">Ping</option>
             <option value="nmap">Nmap</option>
+            <option value="openvas">Openvas</option>
           </select><br/>
           <label htmlFor="host">Host</label>
           <input id="host" value={this.state.host} onChange={this.updateHost}/><br/>
           {
             this.state.command === 'ping'
               ? <div><label htmlFor="ttl">TTL</label><input id="ttl" value={this.state.ttl} onChange={this.updateTtl}/></div>
-              : <div><label htmlFor="params">Keys</label><input id="params" value={this.state.params} onChange={this.updateParams}/></div>
+              : this.state.command === 'nmap'
+                ? <div><label htmlFor="params">Keys</label><input id="params" value={this.state.params} onChange={this.updateParams}/></div>
+                : null
           }
           <br/>
           <button className="btn btn-danger" onClick={this.sendCommand.bind(this)}>Execute command</button>
