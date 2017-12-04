@@ -6,3 +6,5 @@
 * run "npm install"
 * run "npm start"
 * open http://localhost:3000/
+
+nmap params for getting progress: "--stats-every 1s -oX -"
