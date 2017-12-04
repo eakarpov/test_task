@@ -1,8 +1,8 @@
 import IJob from './IJob';
 
 export default class NmapJob extends IJob {
-  constructor() {
-    super("nmap");
+  constructor(key) {
+    super("nmap", key);
   }
 
   configure(params) {

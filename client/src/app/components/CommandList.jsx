@@ -14,7 +14,7 @@ class CommandList extends React.Component {
     };
   }
 
-  componentWillMount(){
+  componentWillMount() {
     const result = [];
     for (const elem of this.props.commands) {
       result.push(<CommandListItem
@@ -31,6 +31,27 @@ class CommandList extends React.Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.commands !== this.props.commands) {
+      const result = [];
+      for (const elem of nextProps.commands) {
+        result.push(<CommandListItem
+          key={`${elem.timeStart}-${elem.command}`}
+          host={elem.host}
+          command={elem.command}
+          timeStart={elem.timeStart}
+          timeEnd={elem.timeEnd}
+          value={elem.value}
+          status={elem.status}
+          task={elem.task}
+          tasks={elem.tasks}
+          percent={elem.percent}/>);
+      }
+      this.setState({
+        elements: result
+      });
+    }
+  }
 
   updateList() {
     axios.get("/api/list")
@@ -40,7 +61,7 @@ class CommandList extends React.Component {
         let i = 0;
         for (const elem of this.props.commands) {
           result.push(<CommandListItem key={i}
-                                       commentary={elem.commentary}
+                                       host={elem.host}
                                        command={elem.command}
                                        timeStart={elem.timeStart}
                                        timeEnd={elem.timeEnd}
@@ -65,7 +86,7 @@ class CommandList extends React.Component {
         <div className="row">
           <CommandListItem
               key={-1}
-              commentary="Commentary"
+              host="Host"
               command="Command"
               timeStart="Time Start"
               timeEnd="Time end"

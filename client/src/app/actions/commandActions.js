@@ -1,4 +1,4 @@
-import { ADD_COMMAND, DELETE_COMMAND, SET_COMMAND_LIST } from "./types";
+import { UPDATE_COMMAND, ADD_COMMAND, DELETE_COMMAND, SET_COMMAND_LIST } from "./types";
 
 export const setCommandList = value => ({
   type: SET_COMMAND_LIST,
@@ -8,6 +8,11 @@ export const setCommandList = value => ({
 export const addCommand = value => ({
   type: ADD_COMMAND,
   payload: value
+});
+
+export const updateCommand = value => ({
+  type: UPDATE_COMMAND,
+  payload: value,
 });
 
 export const deleteCommand = () => ({

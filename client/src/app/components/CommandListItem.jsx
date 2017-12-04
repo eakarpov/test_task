@@ -31,7 +31,7 @@ export default class CommandListItem extends React.Component {
       <div className="col-md-1">{timeValueStart}</div>
       <div className="col-md-1">{timeValueEnd}</div>
       <div className="col-md-4">{this.props.value}</div>
-      <div className="col-md-1">{status}</div>
+      <div className="col-md-1">{status === 'Proceeding' ? this.props.task ? `${this.props.task}/${this.props.tasks} - ${this.props.percent}` : status : status}</div>
     </div>);
   }
 }

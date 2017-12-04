@@ -45,8 +45,9 @@ class Launcher extends React.Component {
 
   sendCommand() {
     const { command, host, params, ttl } = this.state;
+    const key = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
     this.props.addCommand({
-      key: -2,
+      key,
       command,
       host,
       timeStart: new Date().getTime(),
@@ -63,9 +64,9 @@ class Launcher extends React.Component {
         Command is sent!
       </div>,
     });
-    axios.get(`/api/launch?command=${command}&host=${host}&data=${JSON.stringify({params,ttl})}`)
-      .then(response => {
-        this.props.setCommandList(response.data._data);
+    axios.get(`/api/launch?command=${command}&host=${host}&key=${key}&data=${JSON.stringify({params,ttl})}`)
+      .then(() => {
+        // this.props.setCommandList(response.data._data);
         this.setState({
           alert2: <div className="alert alert-primary" role="alert">
             <button type="button" className="close" data-dismiss="alert" aria-label="Close">

@@ -4,8 +4,9 @@ import parser from 'xml2json';
 import { DOMParser } from 'xmldom';
 
 export default class IJob {
-  constructor(name) {
+  constructor(name, key) {
     this.name = name;
+    this.key = key;
     this.state = {
       completed: false,
       initial: true,
@@ -47,9 +48,15 @@ export default class IJob {
             const json = parser.toJson(progress.toString());
             const obj = JSON.parse(json);
             if (obj.taskprogress) {
-              console.log(obj.taskprogress.percent);
+              global.io.emit('task-progress', {
+                job: this.key,
+                task: obj.taskprogress.task,
+                tasks: 2,
+                taskId: obj.taskprogress.task === 'Ping Scan' ? 1 : 2,
+                percent: obj.taskprogress.percent,
+              });
+              console.log(`${this.key} - ${obj.taskprogress.task} - ${obj.taskprogress.percent}`);
             }
-            // console.log(doc);
           }
           this.data += buf;
         } else {

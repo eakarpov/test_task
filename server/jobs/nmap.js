@@ -20,7 +20,10 @@ process.on('message', (msg) => {
     });
     ps.on('error', (error) => process.send({ data: error }));
     ps.stderr.on('data', (error) => process.send({ data: error }));
-    ps.on('exit', () => process.send({ finished: true }))
+    ps.on('exit', () => {
+      process.send({ finished: true });
+      ps.kill();
+    })
   }
   if (msg.data) {
     process.send({ data: msg.data });
