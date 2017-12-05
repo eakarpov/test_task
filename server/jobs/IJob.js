@@ -1,3 +1,6 @@
+import {fork} from 'child_process';
+import path from 'path';
+
 export default class IJob {
   constructor(name, key) {
     this.name = name;
@@ -20,8 +23,32 @@ export default class IJob {
     this.data = '';
   }
 
-  run() {
-   this.state.initial = false;
+  onData(data) {
+    console.log(data);
+  }
+
+  run(params) {
+    this.state.initial = false;
+    const cParams = this.configure(Object.assign(params, {command: this.name, key: this.key}));
+    const prms = Object.keys(cParams).map(el => `${el} ${cParams[el]}`);
+    this.process = fork(path.resolve(__dirname, `./${this.name}.js`), prms);
+    this.process.send({ start: true });
+    this.process.on('message', (msg) => {
+      if (msg.terminated) {
+        this.process.kill();
+        console.log(`${this.process.pid} killed - ${this.process.killed}`);
+        setTimeout(() => this.emitter.setIsCompleted(true), 1000);
+      }
+      if (msg.data) {
+        this.onData(msg.data);
+      }
+      if (msg.finished) {
+        console.log("finished");
+        // console.log(parser.toJson(this.data));
+        this.process.send({ terminate: true });
+      }
+    });
+    return this.process;
   }
 
   get() {
