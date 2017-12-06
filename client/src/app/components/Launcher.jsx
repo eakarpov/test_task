@@ -13,6 +13,7 @@ class Launcher extends React.Component {
       alert2: undefined,
       command: 'ping',
       params: '',
+      service: '',
       ttl: '',
       host: '',
     };
@@ -20,6 +21,7 @@ class Launcher extends React.Component {
     this.updateTtl = this.updateTtl.bind(this);
     this.updateHost = this.updateHost.bind(this);
     this.updateParams = this.updateParams.bind(this);
+    this.updateService = this.updateService.bind(this);
   }
 
   change(e) {
@@ -42,9 +44,14 @@ class Launcher extends React.Component {
       params: e.target.value,
     });
   }
+  updateService(e) {
+    this.setState({
+      service: e.target.value,
+    });
+  }
 
   sendCommand() {
-    const { command, host, params, ttl } = this.state;
+    const { command, host, params, ttl, service } = this.state;
     const key = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
     this.props.addCommand({
       key,
@@ -64,7 +71,7 @@ class Launcher extends React.Component {
         Command is sent!
       </div>,
     });
-    axios.get(`/api/launch?command=${command}&host=${host}&key=${key}&data=${JSON.stringify({params,ttl})}`)
+    axios.get(`/api/launch?command=${command}&service=${service}&host=${host}&key=${key}&data=${JSON.stringify({params,ttl})}`)
       .then(() => {
         // this.props.setCommandList(response.data._data);
         this.setState({
@@ -91,6 +98,7 @@ class Launcher extends React.Component {
             <option value="ping">Ping</option>
             <option value="nmap">Nmap</option>
             <option value="openvas">Openvas</option>
+            <option value="hydra">Hydra</option>
           </select><br/>
           <label htmlFor="host">Host</label>
           <input id="host" value={this.state.host} onChange={this.updateHost}/><br/>
@@ -99,6 +107,11 @@ class Launcher extends React.Component {
               ? <div><label htmlFor="ttl">TTL</label><input id="ttl" value={this.state.ttl} onChange={this.updateTtl}/></div>
               : this.state.command === 'nmap'
                 ? <div><label htmlFor="params">Keys</label><input id="params" value={this.state.params} onChange={this.updateParams}/></div>
+                : this.state.command === 'hydra'
+                ? <div><label htmlFor="service">Service</label>
+                <input id="service" value={this.state.service} onChange={this.updateService} /><br/>
+                <label htmlFor="params">Keys</label><input id="params" value={this.state.params} onChange={this.updateParams}/>
+                </div>
                 : null
           }
           <br/>

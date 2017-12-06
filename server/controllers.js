@@ -1,9 +1,10 @@
 import store from "./list";
 import NmapJob from './jobs/NmapJob';
 import OpenvasJob from './jobs/OpenvasJob';
+import HydraJob from './jobs/HydraJob';
 
 export function launch(req, res) {
-  let command, host, timeStart, key;
+  let command, host, timeStart, key, service;
   try {
     const data = JSON.parse(req.query.data);
     command = req.query.command;
@@ -20,9 +21,14 @@ export function launch(req, res) {
         job = new OpenvasJob(key);
         break;
       }
+      case 'hydra': {
+        service = req.query.service;
+        job = new HydraJob(key, service);
+        break;
+      }
       default: job = null;
     }
-    if (job === null) res.send(400);
+    if (job === null) res.sendStatus(400);
     else {
       res.sendStatus(201);
       job.run({host, data});

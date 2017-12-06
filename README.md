@@ -8,3 +8,4 @@
 * open http://localhost:3000/
 
 nmap params for getting progress: "--stats-every 1s -oX -"
+hydra params for getting progress: "-l ftp -p 11111111 -e nsr -V"

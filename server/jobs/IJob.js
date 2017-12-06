@@ -2,7 +2,7 @@ import {fork} from 'child_process';
 import path from 'path';
 
 export default class IJob {
-  constructor(name, key) {
+  constructor(name, key, data='') {
     this.name = name;
     this.key = key;
     this.state = {
@@ -20,11 +20,14 @@ export default class IJob {
       };
     };
     this.emitter = this.Create();
-    this.data = '';
+    this.data = data;
   }
 
   onData(data) {
     console.log(data);
+  }
+  onFinished() {
+    console.log("finished");
   }
 
   run(params) {
@@ -43,7 +46,7 @@ export default class IJob {
         this.onData(msg.data);
       }
       if (msg.finished) {
-        console.log("finished");
+        this.onFinished();
         // console.log(parser.toJson(this.data));
         this.process.send({ terminate: true });
       }
