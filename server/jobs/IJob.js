@@ -72,6 +72,7 @@ export default class IJob {
   }
 
   terminate() {
+    this.data = null;
     this.process.send({ terminate: true });
   }
 }

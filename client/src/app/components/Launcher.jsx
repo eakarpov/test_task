@@ -22,6 +22,7 @@ class Launcher extends React.Component {
     this.updateHost = this.updateHost.bind(this);
     this.updateParams = this.updateParams.bind(this);
     this.updateService = this.updateService.bind(this);
+    this.createCommand = this.createCommand.bind(this);
   }
 
   change(e) {
@@ -48,6 +49,33 @@ class Launcher extends React.Component {
     this.setState({
       service: e.target.value,
     });
+  }
+
+  createCommand() {
+    const { command, host, params, ttl, service } = this.state;
+    const key = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
+    this.setState({
+      alert1: <div className="alert alert-primary" role="alert">
+        <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        Command is send!
+      </div>,
+    });
+    axios.get(`/api/create?command=${command}&service=${service}&host=${host}&key=${key}&data=${JSON.stringify({params,ttl})}`)
+      .then(() => {
+        this.setState({
+          alert2: <div className="alert alert-primary" role="alert">
+            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            Command is create!
+          </div>,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   sendCommand() {
@@ -116,6 +144,7 @@ class Launcher extends React.Component {
           }
           <br/>
           <button className="btn btn-danger" onClick={this.sendCommand.bind(this)}>Execute command</button>
+          <button className="btn btn-primary" onClick={this.createCommand}>Create command</button>
         </div>
       </div>
     );

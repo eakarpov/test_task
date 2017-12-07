@@ -18,7 +18,8 @@ class CommandList extends React.Component {
     const result = [];
     for (const elem of this.props.commands) {
       result.push(<CommandListItem
-        key={`${elem.timeStart}-${elem.command}`}
+        key={elem.key}
+        id={elem.key}
         host={elem.host}
         command={elem.command}
         timeStart={elem.timeStart}
@@ -36,7 +37,8 @@ class CommandList extends React.Component {
       const result = [];
       for (const elem of nextProps.commands) {
         result.push(<CommandListItem
-          key={`${elem.timeStart}-${elem.command}`}
+          key={elem.key}
+          id={elem.key}
           host={elem.host}
           command={elem.command}
           timeStart={elem.timeStart}
@@ -60,7 +62,8 @@ class CommandList extends React.Component {
         const result = [];
         let i = 0;
         for (const elem of this.props.commands) {
-          result.push(<CommandListItem key={i}
+          result.push(<CommandListItem key={elem.key}
+                                       id={elem.key} 
                                        host={elem.host}
                                        command={elem.command}
                                        timeStart={elem.timeStart}

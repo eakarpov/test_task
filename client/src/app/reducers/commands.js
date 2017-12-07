@@ -15,6 +15,7 @@ export default (state = [], action = {}) => {
       el.tasks = action.payload.tasks;
       el.task = action.payload.taskId;
       el.percent = action.payload.percent;
+      el.status = 2;
       return [
         ...state.slice(0,ind),
         el,
